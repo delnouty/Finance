@@ -7,38 +7,36 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-# Configurer l'option pour que le navigateur n'affiche pas de fenêtre (headless)
+# Configure the option to run the browser in headless mode (no window display)
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 
-# Chemin vers ton WebDriver
+# Path to your WebDriver
 service = Service(executable_path="..\\drivers\\chromedriver.exe")
 
-# Initialiser le driver avec les options
+# Initialize the driver with the options
 driver = webdriver.Chrome(service=service, options=chrome_options)
 
-# Ouvrir la page avec Selenium
+# Open the page with Selenium
 driver.get("https://quotes.toscrape.com/tableful/")
 
-# Attendre que les tags soient présents sur la page
+# Wait until the tags are present on the page
 WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//td/a")))
 
+# Retrieve all <td> cells that contain tags
+tags_elements = driver.find_elements(By.XPATH, "//td/a[contains(@href, 'tag')]")
 
-# Récupérer toutes les cellules <td> qui contiennent des tags
-tags_elements = driver.find_elements(By.XPATH, "//td[contains(text(), 'Tags:')]/a")
-
-# Extraire les textes des liens (les noms des tags)
+# Extract the text from the links (the tag names)
 tags = [tag.text for tag in tags_elements]
 
-# Compter les occurrences de chaque tag
+# Count the occurrences of each tag
 tag_counts = Counter(tags)
 
-# Trouver le tag le plus répétitif
-most_common_tag = tag_counts.most_common(1)[0]  # Renvoie le tag le plus fréquent
+# Find the most repetitive tag
+most_common_tag = tag_counts.most_common(1)[0]  # Returns the most frequent tag
 
-print("Tag le plus répétitif:", most_common_tag[0])
-print("Nombre d'occurrences:", most_common_tag[1])
+print("Most repetitive tag:", most_common_tag[0])
+print("Number of occurrences:", most_common_tag[1])
 
-# Fermer le driver
+# Close the driver
 driver.quit()
-
