@@ -6,8 +6,7 @@ from collections import Counter
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
-# Configure the option to run the browser in headless mode (no window display)
+# Configure the option to run the browser in headless mode (no window displayed)
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 
@@ -24,9 +23,9 @@ driver.get("https://quotes.toscrape.com/tableful/")
 WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//td/a")))
 
 # Retrieve all <td> cells that contain tags
-tags_elements = driver.find_elements(By.XPATH, "//td/a[contains(@href, 'tag')]")
+tags_elements = driver.find_elements(By.XPATH, "//td[contains(text(), 'Tags:')]/a")
 
-# Extract the text from the links (the tag names)
+# Extract the text from the links (the names of the tags)
 tags = [tag.text for tag in tags_elements]
 
 # Count the occurrences of each tag
@@ -40,3 +39,4 @@ print("Number of occurrences:", most_common_tag[1])
 
 # Close the driver
 driver.quit()
+
